@@ -242,7 +242,8 @@ def main():
     ax.set_xlabel('Change-point τ (hours)')
     ax.set_ylabel('Posterior density')
     ax.set_title('When did the change happen? (Continuous τ)')
-    ax.set_xlim(0, 24)
+    tau_margin = max(0.5, (np.percentile(samples_tau, 99) - np.percentile(samples_tau, 1)) * 0.3)
+    ax.set_xlim(np.percentile(samples_tau, 1) - tau_margin, np.percentile(samples_tau, 99) + tau_margin)
     ax.legend(fontsize=8)
 
     # Plot 3: Posterior of μ₁
@@ -273,7 +274,12 @@ def main():
     ax.set_xlabel('Change-point τ (hours)')
     ax.set_ylabel('Effect size μ₂ - μ₁ (ms)')
     ax.set_title('Joint posterior: When & How Much?')
-    ax.set_xlim(14, 15)
+    tau_sub = samples_tau[::10]
+    eff_sub = effect_size[::10]
+    tau_margin_j = max(0.5, (np.percentile(tau_sub, 99) - np.percentile(tau_sub, 1)) * 0.3)
+    eff_margin_j = max(1.0, (np.percentile(eff_sub, 99) - np.percentile(eff_sub, 1)) * 0.3)
+    ax.set_xlim(np.percentile(tau_sub, 1) - tau_margin_j, np.percentile(tau_sub, 99) + tau_margin_j)
+    ax.set_ylim(np.percentile(eff_sub, 1) - eff_margin_j, np.percentile(eff_sub, 99) + eff_margin_j)
 
     # Plot 6: Trace plot showing continuous exploration
     ax = axes[1, 2]
@@ -282,7 +288,9 @@ def main():
     ax.set_xlabel('MCMC iteration')
     ax.set_ylabel('τ (hours)')
     ax.set_title('Trace plot: MCMC exploring continuous τ')
-    ax.set_ylim(0, 24)
+    trace_data = samples_tau[:1000]
+    trace_margin = max(0.5, (trace_data.max() - trace_data.min()) * 0.15)
+    ax.set_ylim(trace_data.min() - trace_margin, trace_data.max() + trace_margin)
     ax.legend(fontsize=8)
 
     plt.tight_layout()
