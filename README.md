@@ -27,12 +27,17 @@ uv sync
 uv run main.py
 ```
 
-Results are printed to the terminal and a visualization is saved to `output/mcmc_continuous_results.png`.
+Results are printed to the terminal and a visualisation is saved to `output/mcmc_continuous_results.png`.
+
+An interactive 3D plot of the joint posterior distribution ($\tau$, $\mu_1$, $\mu_2$) is saved to `output/posterior_3d.html`. Open it in a browser to pan, zoom, and rotate.
+
+![3D posterior distribution](./plotly-screenshot.png)
 
 ## Dependencies
 
 - [NumPy](https://numpy.org/) -- numerical computation
 - [Matplotlib](https://matplotlib.org/) -- plotting
+- [Plotly](https://plotly.com/python/) -- interactive 3D visualisation
 
 ## License
 

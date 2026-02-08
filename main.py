@@ -9,6 +9,7 @@ is analytically intractable.
 
 import numpy as np
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 
 np.random.seed(42)
 
@@ -156,6 +157,68 @@ def metropolis_hastings():
     return np.array(samples_tau), np.array(samples_mu1), np.array(samples_mu2)
 
 
+def plot_3d_posterior(samples_tau, samples_mu1, samples_mu2):
+    """Interactive 3D scatter plot of the joint posterior (τ, μ₁, μ₂)."""
+    # Thin samples for performance
+    step = max(1, len(samples_tau) // 4000)
+    tau = samples_tau[::step]
+    mu1 = samples_mu1[::step]
+    mu2 = samples_mu2[::step]
+
+    # Colour by log-posterior density (brighter = higher density)
+    log_posts = np.array([
+        log_posterior(t, m1, m2, DATA) for t, m1, m2 in zip(tau, mu1, mu2)
+    ])
+
+    fig = go.Figure(data=[
+        go.Scatter3d(
+            x=tau, y=mu1, z=mu2,
+            mode='markers',
+            marker=dict(
+                size=2,
+                color=log_posts,
+                colorscale='Viridis',
+                opacity=0.6,
+                colorbar=dict(title='Log-posterior'),
+            ),
+            name='Posterior samples',
+            hovertemplate=(
+                'τ = %{x:.2f}h<br>'
+                'μ₁ = %{y:.1f} ms<br>'
+                'μ₂ = %{z:.1f} ms<extra></extra>'
+            ),
+        ),
+        # True values
+        go.Scatter3d(
+            x=[TRUE_TAU], y=[TRUE_MU1], z=[TRUE_MU2],
+            mode='markers',
+            marker=dict(size=6, color='red', symbol='x'),
+            name=f'True values (τ={TRUE_TAU}, μ₁={TRUE_MU1}, μ₂={TRUE_MU2})',
+        ),
+        # Posterior mean
+        go.Scatter3d(
+            x=[samples_tau.mean()], y=[samples_mu1.mean()], z=[samples_mu2.mean()],
+            mode='markers',
+            marker=dict(size=6, color='lime', symbol='diamond'),
+            name=f'Posterior mean (τ={samples_tau.mean():.2f}, μ₁={samples_mu1.mean():.1f}, μ₂={samples_mu2.mean():.1f})',
+        ),
+    ])
+
+    fig.update_layout(
+        title='MCMC Posterior Distribution (τ, μ₁, μ₂)',
+        scene=dict(
+            xaxis_title='Change-point τ (hours)',
+            yaxis_title='μ₁ — mean before (ms)',
+            zaxis_title='μ₂ — mean after (ms)',
+        ),
+        width=900,
+        height=700,
+        legend=dict(yanchor='top', y=0.95, xanchor='left', x=0.01),
+    )
+
+    fig.write_html('output/posterior_3d.html')
+
+
 def main():
     print_title("STEP 0: Reality")
     print(f"There was a change-point in server response times r during a 24 hour period")
@@ -299,7 +362,7 @@ def main():
 
     plt.tight_layout()
     plt.savefig('output/mcmc_continuous_results.png', dpi=150, bbox_inches='tight')
-    print("Visualization saved!")
+    print("Visualisation saved!")
     print()
     print()
 
@@ -318,7 +381,11 @@ def main():
     parameter settings pairwise, and the normalizing constant cancels out.
     """)
 
+    # 3D interactive visualisation
+    plot_3d_posterior(samples_tau, samples_mu1, samples_mu2)
+
     print("Done! Check mcmc_continuous_results.png")
+    print("Interactive 3D posterior saved to output/posterior_3d.html")
 
 if __name__ == "__main__":
     main()
