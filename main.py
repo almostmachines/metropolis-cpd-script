@@ -1,7 +1,7 @@
 """
 Metropolis-Hastings Change-Point Detection
 ==============================================
-Detecting when a change occurred in continuous time over a 24-hour period.
+Detecting when a change occurred in time over a 24-hour period.
 
 This demonstrates MCMC on a problem where the evidence p(data)
 is analytically intractable.
@@ -297,7 +297,7 @@ def main():
     ax.set_xticklabels(['0', '6', '12', '18', '24'])
     ax.legend(fontsize=8)
 
-    # Plot 2: Posterior of τ (continuous!)
+    # Plot 2: Posterior of τ
     ax = axes[0, 1]
     ax.hist(samples_tau, bins=100, density=True, alpha=0.7, edgecolor='none', color='steelblue')
     ax.axvline(TRUE_TAU, color='red', linestyle='--', linewidth=2, label=f'True τ = {TRUE_TAU}h')
@@ -348,13 +348,13 @@ def main():
     ax.set_ylim(np.percentile(eff_sub, 1) - eff_margin_j, np.percentile(eff_sub, 99) + eff_margin_j)
     ax.legend(fontsize=7, loc='upper left')
 
-    # Plot 6: Trace plot showing continuous exploration
+    # Plot 6: Trace plot showing exploration
     ax = axes[1, 2]
     ax.plot(samples_tau[:1000], alpha=0.7, linewidth=0.5, color='steelblue')
     ax.axhline(TRUE_TAU, color='red', linestyle='--', linewidth=2, label=f'True τ = {TRUE_TAU}h')
     ax.set_xlabel('MCMC iteration')
     ax.set_ylabel('τ (hours)')
-    ax.set_title('Trace plot: MCMC exploring continuous τ')
+    ax.set_title('Trace plot: MCMC exploring τ')
     trace_data = samples_tau[:1000]
     trace_margin = max(0.5, (trace_data.max() - trace_data.min()) * 0.15)
     ax.set_ylim(trace_data.min() - trace_margin, trace_data.max() + trace_margin)
