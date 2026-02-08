@@ -268,9 +268,12 @@ def main():
 
     # Plot 5: Joint posterior of τ and effect size
     ax = axes[1, 1]
-    ax.scatter(samples_tau[::10], effect_size[::10], alpha=0.3, s=5, c='steelblue')
-    ax.axvline(TRUE_TAU, color='red', linestyle='--', linewidth=1, alpha=0.7)
-    ax.axhline(TRUE_MU2 - TRUE_MU1, color='red', linestyle='--', linewidth=1, alpha=0.7)
+    ax.scatter(samples_tau[::10], effect_size[::10], alpha=0.3, s=5, c='steelblue', label='Posterior samples')
+    ax.axvline(TRUE_TAU, color='red', linestyle='--', linewidth=1.5, alpha=0.8, label=f'True τ = {TRUE_TAU}h')
+    ax.axhline(TRUE_MU2 - TRUE_MU1, color='red', linestyle='--', linewidth=1.5, alpha=0.8, label=f'True effect = {TRUE_MU2 - TRUE_MU1:.0f} ms')
+    ax.axvline(samples_tau.mean(), color='green', linestyle='-', linewidth=1.5, alpha=0.8, label=f'Est. τ = {samples_tau.mean():.2f}h')
+    ax.axhline(effect_size.mean(), color='green', linestyle='-', linewidth=1.5, alpha=0.8, label=f'Est. effect = {effect_size.mean():.1f} ms')
+    ax.plot(samples_tau.mean(), effect_size.mean(), 'x', color='green', markersize=10, markeredgewidth=2)
     ax.set_xlabel('Change-point τ (hours)')
     ax.set_ylabel('Effect size μ₂ - μ₁ (ms)')
     ax.set_title('Joint posterior: When & How Much?')
@@ -280,6 +283,7 @@ def main():
     eff_margin_j = max(1.0, (np.percentile(eff_sub, 99) - np.percentile(eff_sub, 1)) * 0.3)
     ax.set_xlim(np.percentile(tau_sub, 1) - tau_margin_j, np.percentile(tau_sub, 99) + tau_margin_j)
     ax.set_ylim(np.percentile(eff_sub, 1) - eff_margin_j, np.percentile(eff_sub, 99) + eff_margin_j)
+    ax.legend(fontsize=7, loc='upper left')
 
     # Plot 6: Trace plot showing continuous exploration
     ax = axes[1, 2]
