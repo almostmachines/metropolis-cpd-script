@@ -1,15 +1,15 @@
-# Metropolis-Hastings Change-Point Detection
+# Change-Point Detection Using the Metropolis Algorithm
 
-Bayesian change-point detection using the Metropolis-Hastings MCMC algorithm. Given noisy time-series observations, the script infers *when* a change occurred and *what* the parameters were before and after the change.
+Companion script to the (metropolis-algorithm.com)[metropolis-algorithm.com] website.
+
+Bayesian change-point detection using the Metropolis algorithm. Given noisy time-series observations, the script infers when a change occurred and what the parameters were before and after the change.
 
 ## The Problem
 
 Imagine that the levels of dissolved oxygen (mg/L) in stream water are sampled at random over a 24 hour period. At some unknown time, the mean oxygen level shifts. We observe noisy measurements but don't know:
 
-- **When** the change happened (the change-point time, $\tau$)
-- **What** the mean oxygen level was before ($\mu_1$) and after ($\mu_2$) the change
-
-Computing the posterior distribution analytically would require integrating over a likelihood with discontinuities at every observation timestamp, making it intractable. Metropolis-Hastings sidesteps this by sampling from the posterior directly, never needing to compute the normalizing constant $p(\text{data})$.
+- When the change happened (the change-point time, $\tau$)
+- What the mean oxygen level was before ($\mu_1$) and after ($\mu_2$) the change
 
 ## Installation
 
