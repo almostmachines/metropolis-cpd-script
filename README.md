@@ -17,7 +17,7 @@ Requires Python and [uv](https://docs.astral.sh/uv/).
 
 ```sh
 git clone https://github.com/almostmachines/metropolis-cpd-script.git
-cd mhcpd
+cd metropolis-cpd-script
 uv sync
 ```
 
