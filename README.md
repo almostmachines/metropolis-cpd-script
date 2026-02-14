@@ -16,7 +16,7 @@ Imagine that the levels of dissolved oxygen (mg/L) in stream water are sampled a
 Requires Python and [uv](https://docs.astral.sh/uv/).
 
 ```sh
-git clone <repo-url>
+git clone https://github.com/almostmachines/metropolis-cpd-script.git
 cd mhcpd
 uv sync
 ```
